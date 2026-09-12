@@ -1,0 +1,26 @@
+/*
+ * Two separate HID interfaces rather than one interface with report IDs.
+ * Boot protocol is only defined for a keyboard or a mouse individually, so
+ * splitting them keeps both usable by a BIOS or bootloader that only speaks
+ * boot protocol, and keeps the reports free of a leading report-ID byte.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/ {
+	hid_kbd: hid_kbd {
+		compatible = "zephyr,hid-device";
+		label = "K64F HID Keyboard";
+		protocol-code = "keyboard";
+		in-report-size = <8>;
+		in-polling-period-us = <1000>;
+	};
+
+	hid_mouse: hid_mouse {
+		compatible = "zephyr,hid-device";
+		label = "K64F HID Mouse";
+		protocol-code = "mouse";
+		in-report-size = <4>;
+		in-polling-period-us = <1000>;
+	};
+};
