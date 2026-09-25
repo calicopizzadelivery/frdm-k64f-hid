@@ -41,6 +41,15 @@ static const struct keyname named_keys[] = {
 	{ "INSERT", 0x49 }, { "HOME", 0x4A }, { "PGUP", 0x4B },
 	{ "DELETE", 0x4C }, { "DEL", 0x4C }, { "END", 0x4D }, { "PGDN", 0x4E },
 	{ "RIGHT", 0x4F }, { "LEFT", 0x50 }, { "DOWN", 0x51 }, { "UP", 0x52 },
+	/*
+	 * Keyboard Application, the "menu" key beside right ctrl. Worth naming
+	 * explicitly because it is the only key a boot-protocol keyboard can
+	 * send that Android turns into KEYCODE_MENU: HID 0x65 -> Linux
+	 * KEY_COMPOSE (127) -> "key 127 MENU" in frameworks Generic.kl. Android
+	 * BACK and HOME are not reachable from this interface at all, since
+	 * those need Consumer Page AC Back / AC Home.
+	 */
+	{ "MENU", 0x65 }, { "APP", 0x65 }, { "APPLICATION", 0x65 }, { "COMPOSE", 0x65 },
 };
 
 /* Printable ASCII 0x20..0x7E -> usage code, and whether shift is needed. */
@@ -230,6 +239,7 @@ static void print_help(cmd_reply_fn reply, void *ctx)
 	reply(ctx, "  HELP                this text");
 	reply(ctx, "key names: a-z 0-9, punctuation, enter esc tab space backspace");
 	reply(ctx, "           del home end pgup pgdn up down left right f1-f12");
+	reply(ctx, "           menu (aliases: app application compose) = KEYCODE_MENU");
 	reply(ctx, "modifiers: ctrl shift alt gui (aliases: control win meta super)");
 }
 

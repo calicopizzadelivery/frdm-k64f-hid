@@ -35,8 +35,24 @@ matching the convention used by the relay controller on the same bench.
 | `VERSION`, `HELP` | |
 
 Key names: `a`–`z`, `0`–`9`, punctuation, and `enter esc tab space backspace
-del home end pgup pgdn up down left right f1`–`f12`.
+del home end pgup pgdn up down left right f1`–`f12`, plus `menu` (aliases
+`app application compose`).
 Modifiers: `ctrl shift alt gui` (aliases `control win meta super`).
+
+### Driving Android
+
+`menu` is HID usage 0x65, Keyboard Application — the key beside right ctrl. It
+is worth knowing about because it is the only key this interface can send that
+Android turns into `KEYCODE_MENU`: 0x65 maps to Linux `KEY_COMPOSE` (127), and
+the framework's `Generic.kl` carries `key 127 MENU`.
+
+Android **BACK** and **HOME** are not reachable from here. Both come from the
+HID Consumer Page (`AC Back` 0x0224, `AC Home` 0x0223), and this is a
+boot-protocol keyboard on usage page 0x07 only, so it has no way to express
+them. `esc` is also not a substitute: it arrives as `KEYCODE_ESCAPE`, and
+`PhoneWindowManager` consumes that with no modifiers to close system dialogs,
+so it never reaches the foreground app. Adding a Consumer Control interface
+would fix both, and is the obvious next step if a test needs BACK.
 
 ```
 > INFO
